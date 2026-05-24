@@ -1,0 +1,172 @@
+<div class="home-container">
+  <div class="header">
+    <h1>Doctors List</h1>
+    <button class="btn btn-primary" (click)="openCreateForm()">+ Create Doctor</button>
+  </div>
+
+  <!-- Error Message -->
+  @if (error()) {
+    <div class="alert alert-error">
+      {{ error() }}
+      <button class="close-btn" (click)="error.set(null)">✕</button>
+    </div>
+  }
+
+  <!-- Loading State -->
+  @if (loading()) {
+    <div class="loading">Loading doctors...</div>
+  }
+
+  <!-- Form Modal -->
+  @if (showForm()) {
+    <div class="modal-overlay">
+      <div class="modal">
+        <div class="modal-header">
+          <h2>{{ editingDoctorId() ? 'Edit Doctor' : 'Create Doctor' }}</h2>
+          <button class="close-btn" (click)="closeForm()">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Full Name *</label>
+            <input 
+              type="text" 
+              [(ngModel)]="formData().fullName"
+              (change)="updateFormField('fullName', $event.target.value)"
+              placeholder="Enter full name"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Specialization *</label>
+            <input 
+              type="text" 
+              [(ngModel)]="formData().specialization"
+              (change)="updateFormField('specialization', $event.target.value)"
+              placeholder="Enter specialization"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Experience Years</label>
+            <input 
+              type="number" 
+              [(ngModel)]="formData().experienceYears"
+              (change)="updateFormField('experienceYears', $event.target.value)"
+              placeholder="Enter years of experience"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Contact Email</label>
+            <input 
+              type="email" 
+              [(ngModel)]="formData().contactEmail"
+              (change)="updateFormField('contactEmail', $event.target.value)"
+              placeholder="Enter email"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Contact Phone</label>
+            <input 
+              type="tel" 
+              [(ngModel)]="formData().contactPhone"
+              (change)="updateFormField('contactPhone', $event.target.value)"
+              placeholder="Enter phone"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Availability</label>
+            <input 
+              type="text" 
+              [(ngModel)]="formData().availability"
+              (change)="updateFormField('availability', $event.target.value)"
+              placeholder="Enter availability"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Hospital Affiliation</label>
+            <input 
+              type="text" 
+              [(ngModel)]="formData().hospitalAffiliation"
+              (change)="updateFormField('hospitalAffiliation', $event.target.value)"
+              placeholder="Enter hospital affiliation"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Profile Picture URL</label>
+            <input 
+              type="url" 
+              [(ngModel)]="formData().profilePictureUrl"
+              (change)="updateFormField('profilePictureUrl', $event.target.value)"
+              placeholder="Enter profile picture URL"
+            />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" (click)="closeForm()">Cancel</button>
+          <button class="btn btn-primary" (click)="saveDoctor()">Save Doctor</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Doctors Table -->
+  @if (!loading() && doctors().length > 0) {
+    <div class="table-container">
+      <table class="doctors-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Specialization</th>
+            <th>Experience</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Hospital</th>
+            <th>Availability</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (doctor of doctors(); track doctor.doctorId) {
+            <tr>
+              <td>{{ doctor.fullName || 'N/A' }}</td>
+              <td>{{ doctor.specialization || 'N/A' }}</td>
+              <td>{{ doctor.experienceYears || 0 }} years</td>
+              <td>{{ doctor.contactEmail || 'N/A' }}</td>
+              <td>{{ doctor.contactPhone || 'N/A' }}</td>
+              <td>{{ doctor.hospitalAffiliation || 'N/A' }}</td>
+              <td>{{ doctor.availability || 'N/A' }}</td>
+              <td class="actions">
+                <button 
+                  class="btn btn-small btn-edit"
+                  (click)="openEditForm(doctor)"
+                  title="Edit"
+                >
+                  ✎ Edit
+                </button>
+                <button 
+                  class="btn btn-small btn-delete"
+                  (click)="deleteDoctor(doctor.doctorId)"
+                  title="Delete"
+                >
+                  🗑 Delete
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+  <!-- Empty State -->
+  @if (!loading() && doctors().length === 0) {
+    <div class="empty-state">
+      <p>No doctors found. Click "Create Doctor" to add one.</p>
+    </div>
+  }
+</div>
