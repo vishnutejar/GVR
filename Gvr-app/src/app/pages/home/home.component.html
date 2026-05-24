@@ -1,172 +1,165 @@
 <div class="home-container">
-  <div class="header">
-    <h1>Doctors List</h1>
-    <button class="btn btn-primary" (click)="openCreateForm()">+ Create Doctor</button>
-  </div>
-
-  <!-- Error Message -->
-  @if (error()) {
-    <div class="alert alert-error">
-      {{ error() }}
-      <button class="close-btn" (click)="error.set(null)">✕</button>
-    </div>
-  }
-
-  <!-- Loading State -->
-  @if (loading()) {
-    <div class="loading">Loading doctors...</div>
-  }
-
-  <!-- Form Modal -->
-  @if (showForm()) {
-    <div class="modal-overlay">
-      <div class="modal">
-        <div class="modal-header">
-          <h2>{{ editingDoctorId() ? 'Edit Doctor' : 'Create Doctor' }}</h2>
-          <button class="close-btn" (click)="closeForm()">✕</button>
-        </div>
-        <div class="modal-body">
-          <div class="form-group">
-            <label>Full Name *</label>
-            <input 
-              type="text" 
-              [(ngModel)]="formData().fullName"
-              (change)="updateFormField('fullName', $event.target.value)"
-              placeholder="Enter full name"
-            />
-          </div>
-
-          <div class="form-group">
-            <label>Specialization *</label>
-            <input 
-              type="text" 
-              [(ngModel)]="formData().specialization"
-              (change)="updateFormField('specialization', $event.target.value)"
-              placeholder="Enter specialization"
-            />
-          </div>
-
-          <div class="form-group">
-            <label>Experience Years</label>
-            <input 
-              type="number" 
-              [(ngModel)]="formData().experienceYears"
-              (change)="updateFormField('experienceYears', $event.target.value)"
-              placeholder="Enter years of experience"
-            />
-          </div>
-
-          <div class="form-group">
-            <label>Contact Email</label>
-            <input 
-              type="email" 
-              [(ngModel)]="formData().contactEmail"
-              (change)="updateFormField('contactEmail', $event.target.value)"
-              placeholder="Enter email"
-            />
-          </div>
-
-          <div class="form-group">
-            <label>Contact Phone</label>
-            <input 
-              type="tel" 
-              [(ngModel)]="formData().contactPhone"
-              (change)="updateFormField('contactPhone', $event.target.value)"
-              placeholder="Enter phone"
-            />
-          </div>
-
-          <div class="form-group">
-            <label>Availability</label>
-            <input 
-              type="text" 
-              [(ngModel)]="formData().availability"
-              (change)="updateFormField('availability', $event.target.value)"
-              placeholder="Enter availability"
-            />
-          </div>
-
-          <div class="form-group">
-            <label>Hospital Affiliation</label>
-            <input 
-              type="text" 
-              [(ngModel)]="formData().hospitalAffiliation"
-              (change)="updateFormField('hospitalAffiliation', $event.target.value)"
-              placeholder="Enter hospital affiliation"
-            />
-          </div>
-
-          <div class="form-group">
-            <label>Profile Picture URL</label>
-            <input 
-              type="url" 
-              [(ngModel)]="formData().profilePictureUrl"
-              (change)="updateFormField('profilePictureUrl', $event.target.value)"
-              placeholder="Enter profile picture URL"
-            />
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" (click)="closeForm()">Cancel</button>
-          <button class="btn btn-primary" (click)="saveDoctor()">Save Doctor</button>
-        </div>
+  <section class="hero">
+    <div class="hero-copy fade-up">
+      <span class="eyebrow">Top Rated Dental Clinic in Chilakaluripet</span>
+      <h1>Healthy smiles start at GVR Multi Speciality Dental Clinic</h1>
+      <p>
+        Discover confident dental care in Guntur with modern treatments, caring specialists, and a warm clinic environment.
+        We deliver high-quality dentistry for families, adults, and children at fair prices.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" routerLink="/appointments">Book Appointment</a>
+        <a class="btn btn-secondary" href="#services">View Services</a>
+      </div>
+      <div class="hero-features">
+        <span>Advanced dental technology</span>
+        <span>Emergency care available</span>
+        <span>Patient-first comfort</span>
       </div>
     </div>
-  }
 
-  <!-- Doctors Table -->
-  @if (!loading() && doctors().length > 0) {
-    <div class="table-container">
-      <table class="doctors-table">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Specialization</th>
-            <th>Experience</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Hospital</th>
-            <th>Availability</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (doctor of doctors(); track doctor.doctorId) {
-            <tr>
-              <td>{{ doctor.fullName || 'N/A' }}</td>
-              <td>{{ doctor.specialization || 'N/A' }}</td>
-              <td>{{ doctor.experienceYears || 0 }} years</td>
-              <td>{{ doctor.contactEmail || 'N/A' }}</td>
-              <td>{{ doctor.contactPhone || 'N/A' }}</td>
-              <td>{{ doctor.hospitalAffiliation || 'N/A' }}</td>
-              <td>{{ doctor.availability || 'N/A' }}</td>
-              <td class="actions">
-                <button 
-                  class="btn btn-small btn-edit"
-                  (click)="openEditForm(doctor)"
-                  title="Edit"
-                >
-                  ✎ Edit
-                </button>
-                <button 
-                  class="btn btn-small btn-delete"
-                  (click)="deleteDoctor(doctor.doctorId)"
-                  title="Delete"
-                >
-                  🗑 Delete
-                </button>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
+    <div class="hero-media fade-up" style="animation-delay: 0.15s;">
+      <div class="image-frame">
+        <img src="https://images.unsplash.com/photo-1588776814546-1a2a9f5ae157?auto=format&fit=crop&w=900&q=80" alt="Dentist checking patient smile" />
+        <div class="image-tag">Smile treatment with expert care</div>
+      </div>
+      <div class="info-card card-highlight">
+        <h2>Clinic details</h2>
+        <p><strong>Location:</strong> Opposite Dr Kolla Ramarao Hospital, Chirala Road, Kalamandir Centre, Chilakaluripet</p>
+        <p><strong>Phone:</strong> <a href="tel:09866490430">098664 90430</a></p>
+        <p><strong>Rating:</strong> 5.0 / 5 based on 2 patient reviews</p>
+        <p><strong>Hours:</strong> Monday – Sunday, 9 am – 9 pm</p>
+      </div>
     </div>
-  }
+  </section>
 
-  <!-- Empty State -->
-  @if (!loading() && doctors().length === 0) {
-    <div class="empty-state">
-      <p>No doctors found. Click "Create Doctor" to add one.</p>
+  <section id="about" class="section fade-up">
+    <div class="section-header">
+      <h2>About GVR Clinic</h2>
     </div>
-  }
+    <p>
+      GVR Multi Speciality Dental Clinic provides specialist dental care in a peaceful and modern setting.
+      Our team brings gentle treatments, advanced equipment, and a patient-first commitment to every appointment.
+    </p>
+    <p>
+      From preventive checkups and deep cleanings to cosmetic smile makeovers, we help you feel confident with a healthy smile.
+      We welcome all patients from Chilakaluripet and the surrounding Guntur region.
+    </p>
+  </section>
+
+  <section id="services" class="section fade-up">
+    <div class="section-header">
+      <h2>Signature Dental Services</h2>
+      <p>Comprehensive treatments designed to restore comfort, strength, and a beautiful smile.</p>
+    </div>
+    <div class="service-grid">
+      <div class="service-card glow-card">
+        <img src="https://images.unsplash.com/photo-1588776814546-1a2a9f5ae157?auto=format&fit=crop&w=600&q=80" alt="Dental consultation" />
+        <h3>General dentistry</h3>
+        <p>Routine checkups, fillings, cleanings, and preventive care for every stage of life.</p>
+      </div>
+      <div class="service-card glow-card">
+        <img src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=600&q=80" alt="Dental cleaning" />
+        <h3>Specialist treatments</h3>
+        <p>Advanced procedures including root canals, crowns, extractions, and oral surgery.</p>
+      </div>
+      <div class="service-card glow-card">
+        <img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=600&q=80" alt="Smiling patient" />
+        <h3>Cosmetic care</h3>
+        <p>Teeth whitening, veneers, smile design, and friendly cosmetic dentistry solutions.</p>
+      </div>
+    </div>
+    <div class="testimonial-banner">
+      <p>“Exceptional care and a comfortable experience — our patients leave with healthier, happier smiles.”</p>
+    </div>
+  </section>
+
+  <section class="section highlights-section fade-up">
+    <div class="section-header">
+      <h2>Why patients choose GVR Clinic</h2>
+      <p>Modern care, trusted specialists, and a welcoming environment for every smile.</p>
+    </div>
+    <div class="highlights-grid">
+      <div class="highlight-card">
+        <h3>Trusted dental specialists</h3>
+        <p>Qualified doctors deliver gentle, precision care with advanced dental solutions.</p>
+      </div>
+      <div class="highlight-card">
+        <h3>Comfort-first clinic</h3>
+        <p>Relaxing treatment rooms, clean facilities, and easy appointment booking.</p>
+      </div>
+      <div class="highlight-card">
+        <h3>Fast appointment care</h3>
+        <p>Emergency support, follow-up plans, and a patient-centered approach.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="section contact-section fade-up">
+    <div class="section-header">
+      <h2>Contact & Location</h2>
+    </div>
+    <div class="contact-cards">
+      <div class="contact-card">
+        <h3>Phone</h3>
+        <a href="tel:09866490430">098664 90430</a>
+      </div>
+      <div class="contact-card">
+        <h3>Address</h3>
+        <p>Opposite Dr Kolla Ramarao Hospital, Chirala Road, Kalamandir Centre, Chilakaluripet, Andhra Pradesh 522616</p>
+      </div>
+      <div class="contact-card">
+        <h3>Hours</h3>
+        <p>Monday – Sunday: 9 am – 9 pm</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section reviews-section fade-up">
+    <div class="section-header">
+      <h2>Patient Reviews</h2>
+      <p>Real feedback from patients who trusted their smile with GVR Clinic.</p>
+    </div>
+    <div class="review-cards">
+      <div class="review-card">
+        <p class="review-text">
+          "Nice hospital to have quality treatment and friendly staff. Reasonable fee."
+        </p>
+        <div class="review-author">— R. Vishnu Teja</div>
+      </div>
+      <div class="review-card">
+        <p class="review-text">
+          "Very nice and quality treatment in this clinic."
+        </p>
+        <div class="review-author">— Mani Varma</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section image-gallery fade-up">
+    <div class="section-header">
+      <h2>See your smile transformation</h2>
+    </div>
+    <div class="gallery-grid">
+      <img src="https://images.unsplash.com/photo-1588776814546-1a2a9f5ae157?auto=format&fit=crop&w=800&q=80" alt="Dental office interior" />
+      <img src="https://images.unsplash.com/photo-1496317556649-f930d733eea2?auto=format&fit=crop&w=800&q=80" alt="Dentist with patient" />
+      <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80" alt="Happy patient smile" />
+    </div>
+  </section>
+
+  <section id="login" class="section auth-section fade-up">
+    <div>
+      <h2>Login</h2>
+      <p>Existing patients can log in to manage appointments and view clinic updates.</p>
+    </div>
+    <a class="btn btn-primary" href="#">Login</a>
+  </section>
+
+  <section id="signup" class="section auth-section alt">
+    <div>
+      <h2>Sign Up</h2>
+      <p>New patients can sign up to receive appointment reminders and clinic notifications.</p>
+    </div>
+    <a class="btn btn-secondary" href="#">Sign Up</a>
+  </section>
 </div>

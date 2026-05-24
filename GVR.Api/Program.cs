@@ -34,6 +34,7 @@ app.UseHttpsRedirection();
 app.UseCors("AllowAngular");
 app.UseRouting();
 app.UseAuthorization();
+app.MapControllers();
 app.MapStaticAssets();
 app.MapControllerRoute(
     name: "default",

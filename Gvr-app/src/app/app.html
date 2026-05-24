@@ -1,1 +1,17 @@
+<header class="app-header">
+  <div class="app-brand">GVR Multi Speciality Dental Clinic</div>
+  <nav class="app-nav">
+    <a class="nav-link" href="/home#about">About</a>
+    <a class="nav-link" href="/home#services">Services</a>
+    <a class="nav-link" href="/home#contact">Contact</a>
+    <a class="nav-link" routerLink="/appointments">Appointments</a>
+  </nav>
+  <div class="auth-buttons">
+    <span class="user-pill" *ngIf="authService.currentUser()">Hi, {{ authService.currentUser()?.fullName }}</span>
+    <button class="btn btn-secondary" type="button" (click)="logout()" *ngIf="authService.currentUser()">Logout</button>
+    <a class="btn btn-secondary" routerLink="/login" *ngIf="!authService.currentUser()">Login</a>
+    <a class="btn btn-primary" routerLink="/signup" *ngIf="!authService.currentUser()">Sign Up</a>
+  </div>
+</header>
+
 <router-outlet></router-outlet>
