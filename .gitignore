@@ -25,7 +25,7 @@ pnpm-debug.log*
 *.opendb
 *.DS_Store
 Thumbs.db
-appsettings.Development.json
-Properties/launchSettings.json
+**/appsettings.Development.json
+**/launchSettings.json
 .vs/
 .idea/
