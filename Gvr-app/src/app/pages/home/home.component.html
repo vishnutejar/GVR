@@ -20,19 +20,11 @@
 
     <div class="hero-media fade-up" style="animation-delay: 0.15s;">
       <div class="image-frame">
-        <img src="https://images.unsplash.com/photo-1588776814546-1a2a9f5ae157?auto=format&fit=crop&w=900&q=80" alt="Dentist checking patient smile" />
-        <div class="image-tag">Smile treatment with expert care</div>
-      </div>
-      <div class="info-card card-highlight">
-        <h2>Clinic details</h2>
-        <p><strong>Location:</strong> Opposite Dr Kolla Ramarao Hospital, Chirala Road, Kalamandir Centre, Chilakaluripet</p>
-        <p><strong>Phone:</strong> <a href="tel:09866490430">098664 90430</a></p>
-        <p><strong>Rating:</strong> 5.0 / 5 based on 2 patient reviews</p>
-        <p><strong>Hours:</strong> Monday – Sunday, 9 am – 9 pm</p>
+          <img src="images/gvr-multi-speciality-clinic-chilakaluripet_1.jpg" alt="Dentist checking patient smile"  height="900" width="100"/>
+          <div class="image-tag">Smile treatment with expert care</div>
       </div>
     </div>
   </section>
-
   <section id="about" class="section fade-up">
     <div class="section-header">
       <h2>About GVR Clinic</h2>
@@ -47,31 +39,58 @@
     </p>
   </section>
 
-  <section id="services" class="section fade-up">
-    <div class="section-header">
-      <h2>Signature Dental Services</h2>
-      <p>Comprehensive treatments designed to restore comfort, strength, and a beautiful smile.</p>
+  <section id="services" class="section highlights-section fade-up">  
+     <div class="section-header" style="margin-top: 10px;">
+      <h2>Our Dental Services</h2>
     </div>
-    <div class="service-grid">
-      <div class="service-card glow-card">
-        <img src="https://images.unsplash.com/photo-1588776814546-1a2a9f5ae157?auto=format&fit=crop&w=600&q=80" alt="Dental consultation" />
-        <h3>General dentistry</h3>
-        <p>Routine checkups, fillings, cleanings, and preventive care for every stage of life.</p>
-      </div>
-      <div class="service-card glow-card">
-        <img src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=600&q=80" alt="Dental cleaning" />
-        <h3>Specialist treatments</h3>
-        <p>Advanced procedures including root canals, crowns, extractions, and oral surgery.</p>
-      </div>
-      <div class="service-card glow-card">
-        <img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=600&q=80" alt="Smiling patient" />
-        <h3>Cosmetic care</h3>
-        <p>Teeth whitening, veneers, smile design, and friendly cosmetic dentistry solutions.</p>
-      </div>
+    <div class="gallery-grid">
+      @for (service of dentalServices; track service.name) {
+        <div class="service-card glow-card">
+          <img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=600&q=80" alt="Smiling patient" />
+          <h3>{{ service.name }}</h3>
+          <p>Teeth whitening, veneers, smile design, and friendly cosmetic dentistry solutions.</p>
+        </div>
+      }
     </div>
-    <div class="testimonial-banner">
-      <p>“Exceptional care and a comfortable experience — our patients leave with healthier, happier smiles.”</p>
+
+    <div class="section-header" style="margin-top: 10px;">
+      <h2>Surgery</h2>
     </div>
+    <div class="gallery-grid">
+      @for (surgery of dentalSurgery; track surgery.name) {
+        <div class="service-card glow-card">
+          <img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=600&q=80" alt="Smiling patient" />
+          <h3>{{ surgery.name }}</h3>
+          <p>Teeth whitening, veneers, smile design, and friendly cosmetic dentistry solutions.</p>
+        </div>
+      }
+    </div>
+
+    <div class="section-header" style="margin-top: 10px;">
+      <h2>Treatment</h2>
+    </div>
+    <div class="gallery-grid">
+      @for (treatment of dentalTreatment; track treatment.name) {
+        <div class="service-card glow-card">
+          <img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=600&q=80" alt="Smiling patient" />
+          <h3>{{ treatment.name }}</h3>
+          <p>Teeth whitening, veneers, smile design, and friendly cosmetic dentistry solutions.</p>
+        </div>
+      }
+    </div>
+    <div class="section-header" style="margin-top: 10px;">
+      <h2>Procedures</h2>
+    </div>
+    <div class="gallery-grid">
+      @for (procedure of dentalProcedures; track procedure.name) {
+        <div class="service-card glow-card">
+          <img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=600&q=80" alt="Smiling patient" />
+          <h3>{{ procedure.name }}</h3>
+          <p>Teeth whitening, veneers, smile design, and friendly cosmetic dentistry solutions.</p>
+        </div>
+      }
+    </div>
+    
   </section>
 
   <section class="section highlights-section fade-up">
@@ -99,20 +118,12 @@
     <div class="section-header">
       <h2>Contact & Location</h2>
     </div>
-    <div class="contact-cards">
-      <div class="contact-card">
-        <h3>Phone</h3>
-        <a href="tel:09866490430">098664 90430</a>
+     <div class="highlight-card">
+          <h3>Clinic details</h3>
+          <p><strong>Location: </strong> GVR Multi Speciality Dental Clinic, Opposite to Dr Kolla Ramarao Hospital, Marella Vari Veedi, Chilakaluripeta, Chilakaluripeta-522616, Andhra Pradesh </p>
+          <p><strong>Phone: </strong> <a href="tel:09866490430">098664 90430</a></p>
+          <p><strong>Hours: </strong> Monday – Sunday, 9 am – 9 pm</p>
       </div>
-      <div class="contact-card">
-        <h3>Address</h3>
-        <p>Opposite Dr Kolla Ramarao Hospital, Chirala Road, Kalamandir Centre, Chilakaluripet, Andhra Pradesh 522616</p>
-      </div>
-      <div class="contact-card">
-        <h3>Hours</h3>
-        <p>Monday – Sunday: 9 am – 9 pm</p>
-      </div>
-    </div>
   </section>
 
   <section class="section reviews-section fade-up">

@@ -11,101 +11,35 @@ import { DoctorService, Doctor } from '../../services/doctor.service';
   styleUrl: './home.component.css'
 })
 export class HomeComponent implements OnInit {
-  doctors = signal<Doctor[]>([]);
-  loading = signal(false);
-  error = signal<string | null>(null);
-  showForm = signal(false);
-  editingDoctorId = signal<number | null>(null);
+   dentalServices = [
+    { name: 'Dental & Oral X-ray', icon: '🩻' },
+    { name: 'Ultrasonic Teeth Cleaning', icon: '🦷' },
+    { name: 'Oral Cleaning', icon: '✨' },
+    { name: 'Braces Removal', icon: '😬' },
+    { name: 'School Dental Camps', icon: '🏫' },
+    { name: 'Advanced Preventive Dental Care', icon: '🛡️' },
+    { name: 'Regular Clean Up', icon: '🪥' },
+    { name: 'Alignment', icon: '📏' },
+    { name: 'Complete Dental Care', icon: '🏥' },
+    { name: 'Gum Care', icon: '🩸' },
+    { name: 'Routine Checkup', icon: '📅' }
+  ];
 
-  formData = signal<Doctor>({
-    experienceYears: 0
-  });
+  dentalSurgery = [
+    { name: 'Scraping Periodontal', icon: '🩺' },
+    { name: 'Oral And Maxillofacial', icon: '🦷' },
+    { name: 'Periodontal Flap', icon: '🔪' }
+  ];
+  dentalTreatment =[
+    { name: 'Bleeding Gums', icon: '🩸' },
+    { name: 'RCT (Root Canal)', icon: '🦷' }
+  ];
+  dentalProcedures = [
+    { name: 'Fixed Prosthodontics', icon: '🦷' }
+  ];
 
-  constructor(private doctorService: DoctorService) {}
+  constructor() {}
 
   ngOnInit() {
-    this.loadDoctors();
-  }
-
-  loadDoctors() {
-    this.loading.set(true);
-    this.error.set(null);
-    this.doctorService.getDoctors().subscribe({
-      next: (data) => {
-        this.doctors.set(data);
-        this.loading.set(false);
-      },
-      error: (err) => {
-        this.error.set('Failed to load doctors. Please ensure the API is running.');
-        console.error(err);
-        this.loading.set(false);
-      }
-    });
-  }
-
-  openCreateForm() {
-    this.editingDoctorId.set(null);
-    this.formData.set({ experienceYears: 0 });
-    this.showForm.set(true);
-  }
-
-  openEditForm(doctor: Doctor) {
-    this.editingDoctorId.set(doctor.doctorId || null);
-    this.formData.set({ ...doctor });
-    this.showForm.set(true);
-  }
-
-  closeForm() {
-    this.showForm.set(false);
-    this.formData.set({ experienceYears: 0 });
-    this.editingDoctorId.set(null);
-  }
-
-  saveDoctor() {
-    const currentForm = this.formData();
-    
-    if (!currentForm.fullName || !currentForm.specialization) {
-      this.error.set('Please fill in all required fields');
-      return;
-    }
-
-    const isEditing = this.editingDoctorId() !== null;
-    const operation = isEditing
-      ? this.doctorService.updateDoctor(this.editingDoctorId()!, currentForm)
-      : this.doctorService.createDoctor(currentForm);
-
-    operation.subscribe({
-      next: () => {
-        this.closeForm();
-        this.loadDoctors();
-        this.error.set(null);
-      },
-      error: (err) => {
-        this.error.set(isEditing ? 'Failed to update doctor' : 'Failed to create doctor');
-        console.error(err);
-      }
-    });
-  }
-
-  deleteDoctor(id: number | undefined) {
-    if (!id) return;
-    
-    if (confirm('Are you sure you want to delete this doctor?')) {
-      this.doctorService.deleteDoctor(id).subscribe({
-        next: () => {
-          this.loadDoctors();
-          this.error.set(null);
-        },
-        error: (err) => {
-          this.error.set('Failed to delete doctor');
-          console.error(err);
-        }
-      });
-    }
-  }
-
-  updateFormField(field: keyof Doctor, value: any) {
-    const current = this.formData();
-    this.formData.set({ ...current, [field]: value });
   }
 }
