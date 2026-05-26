@@ -2,7 +2,7 @@ import { Component, effect, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AppointmentService, Appointment } from '../../services/appointment.service';
+import { AppointmentService, Appointment, ServiceType } from '../../services/appointment.service';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -18,13 +18,14 @@ export class AppointmentsComponent {
   }
 
   appointmentDate = '';
-  serviceType = '';
+  serviceTypes = '';
   notes = '';
   loading = signal(false);
   error = signal<string | null>(null);
   success = signal<string | null>(null);
   upcoming = signal<Appointment[]>([]);
   past = signal<Appointment[]>([]);
+  serviceTypesList = signal<ServiceType[]>([]);
 
   constructor(
     private authService: AuthService,
@@ -37,10 +38,48 @@ export class AppointmentsComponent {
         this.loadAppointments(user.userId);
       }
     });
+
+    effect(() => {
+      this.loadServiceTypes();
+    });
   }
 
   get isAuthenticated() {
     return !!this.currentUser();
+  }
+
+  loadServiceTypes() {
+    this.appointmentService.getServiceTypes().subscribe({
+      next: (serviceTypes) => {
+        // Handle service types if needed
+        this.loading.set(true);
+        this.error.set(null);
+        this.serviceTypesList.set(serviceTypes);
+        this.loading.set(false);
+      },
+      error: (err) => {
+        this.error.set('Unable to load service types. Please try again.');
+        console.error(err);
+      }
+    });
+  }
+
+  loadService(userId: number) {
+    this.loading.set(true);
+    this.error.set(null);
+    this.appointmentService.getAppointmentsByUser(userId).subscribe({
+      next: (appointments) => {
+        const now = new Date();
+        this.upcoming.set(appointments.filter(appointment => new Date(appointment.appointmentDate) >= now));
+        this.past.set(appointments.filter(appointment => new Date(appointment.appointmentDate) < now));
+        this.loading.set(false);
+      },
+      error: (err) => {
+        this.error.set('Unable to load appointments. Please try again.');
+        console.error(err);
+        this.loading.set(false);
+      }
+    });
   }
 
   loadAppointments(userId: number) {
@@ -65,7 +104,7 @@ export class AppointmentsComponent {
     this.error.set(null);
     this.success.set(null);
 
-    if (!this.serviceType.trim() || !this.appointmentDate.trim() || !this.notes.trim()) {
+    if (!this.serviceTypes.trim() || !this.appointmentDate.trim() || !this.notes.trim()) {
       this.error.set('Please fill in all required fields for your appointment.');
       return;
     }
@@ -78,7 +117,7 @@ export class AppointmentsComponent {
 
     const payload: Appointment = {
       userId: user.userId,
-      serviceType: this.serviceType.trim(),
+      serviceType: this.serviceTypes.trim(),
       appointmentDate: new Date(this.appointmentDate).toISOString(),
       notes: this.notes.trim(),
       status: 'Upcoming'
@@ -88,7 +127,7 @@ export class AppointmentsComponent {
     this.appointmentService.createAppointment(payload).subscribe({
       next: () => {
         this.success.set('Appointment booked successfully.');
-        this.serviceType = '';
+        this.serviceTypes = '';
         this.appointmentDate = '';
         this.notes = '';
         this.loadAppointments(user.userId);

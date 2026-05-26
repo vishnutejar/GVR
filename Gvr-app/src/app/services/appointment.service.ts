@@ -13,11 +13,26 @@ export interface Appointment {
   updatedAt?: string;
 }
 
+export interface ServiceType {
+      ServiceTypeId?: number;
+     ServiceCategory: string;
+     ServiceName: string;
+     Description: string;
+     Price: number;
+     CreatedAt: string;
+     UpdatedAt: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class AppointmentService {
   private apiUrl = 'http://localhost:5207/api/appointments';
+  private serviceTypesUrl = 'http://localhost:5207/api/servicetype';
+  serviceTypesList: ServiceType[] = [];
+
+  serviceTypesSearchText = '';
+  filteredItems = [...this.serviceTypesList];
 
   constructor(private http: HttpClient) {}
 
@@ -39,5 +54,21 @@ export class AppointmentService {
 
   deleteAppointment(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  getServiceTypes(): Observable<ServiceType[]> {
+    return this.http.get<ServiceType[]>(`${this.serviceTypesUrl}`);
+  }
+
+  filterItems() {
+    const query = this.serviceTypesSearchText.toLowerCase();
+    this.filteredItems = this.serviceTypesList.filter(item =>
+      item.ServiceName.toLowerCase().includes(query)
+    );
+  }
+
+  selectItem(item: ServiceType) {
+    this.serviceTypesSearchText = item.ServiceName;
+    this.filteredItems = [];
   }
 }

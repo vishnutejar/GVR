@@ -25,7 +25,10 @@
       <form class="appointment-form" (ngSubmit)="bookAppointment()">
         <div class="form-group">
           <label for="serviceType">Service Type</label>
-          <input id="serviceType" name="serviceType" type="text" [(ngModel)]="serviceType" required placeholder="E.g. General checkup, root canal" />
+          <input id="serviceType" name="serviceType" type="text" [(ngModel)]="serviceTypes"  (input)="filterItems()"required placeholder="E.g. General checkup, root canal" />
+          <ul *ngIf="filteredItems.length">
+              <li *ngFor="let item of filteredItems" (click)="selectItem(item)">{{ item.ServiceName }}</li>
+          </ul>
         </div>
         <div class="form-group">
           <label for="appointmentDate">Appointment Date & Time</label>
