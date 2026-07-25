@@ -26,6 +26,7 @@ export class AppointmentsComponent {
   upcoming = signal<Appointment[]>([]);
   past = signal<Appointment[]>([]);
   serviceTypesList = signal<ServiceType[]>([]);
+  filteredItems: ServiceType[] = [];
 
   constructor(
     private authService: AuthService,
@@ -140,4 +141,22 @@ export class AppointmentsComponent {
       }
     });
   }
+
+filterItems(): void {
+  const searchText = this.serviceTypes.toLowerCase().trim();
+
+  if (!searchText) {
+    this.filteredItems = [];
+    return;
+  }
+
+  this.filteredItems = this.serviceTypesList().filter(item =>
+    item.ServiceName.toLowerCase().includes(searchText)
+  );
+}
+
+selectItem(item: ServiceType): void {
+  this.serviceTypes = item.ServiceName;
+  this.filteredItems = [];
+}
 }
