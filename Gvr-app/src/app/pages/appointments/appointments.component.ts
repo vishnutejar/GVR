@@ -26,6 +26,8 @@ export class AppointmentsComponent {
   upcoming = signal<Appointment[]>([]);
   past = signal<Appointment[]>([]);
   serviceTypesList = signal<ServiceType[]>([]);
+  selectedServiceTypes: string = '';
+  filteredItems: ServiceType[] = [];
 
   constructor(
     private authService: AuthService,
@@ -55,6 +57,8 @@ export class AppointmentsComponent {
         this.loading.set(true);
         this.error.set(null);
         this.serviceTypesList.set(serviceTypes);
+        // This will hold filtered results
+        this.filteredItems = serviceTypes;
         this.loading.set(false);
       },
       error: (err) => {
@@ -64,6 +68,7 @@ export class AppointmentsComponent {
     });
   }
 
+  
   loadService(userId: number) {
     this.loading.set(true);
     this.error.set(null);
@@ -139,5 +144,19 @@ export class AppointmentsComponent {
         this.loading.set(false);
       }
     });
+  }
+
+  // Called when user types in the input
+  filterItems() {
+    const query = this.selectedServiceTypes.toLowerCase();
+    this.filteredItems = this.serviceTypesList().filter(item =>
+      item.ServiceName.toLowerCase().includes(query)
+    );
+  }
+
+  // Called when user clicks on an item
+  selectItem(item: any) {
+    this.selectedServiceTypes = item.ServiceName;
+    this.filteredItems = []; // hide dropdown after selection
   }
 }
