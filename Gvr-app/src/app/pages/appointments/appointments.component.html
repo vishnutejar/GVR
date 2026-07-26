@@ -25,15 +25,22 @@
       <form class="appointment-form" (ngSubmit)="bookAppointment()">
         <div class="form-group">
           <label for="serviceType">Service Type</label>
-          
+          <select id="serviceType" class="form-control" [(ngModel)]="serviceTypes">
+            <option value="" disabled selected>Select a service</option>
+            <option *ngFor="let type of serviceTypesList()" [value]="type.ServiceName">
+              {{ type.ServiceName }}
+            </option>
+          </select>
         </div>
         <div class="form-group">
           <label for="appointmentDate">Appointment Date & Time</label>
-          <input id="appointmentDate" name="appointmentDate" type="datetime-local" [(ngModel)]="appointmentDate" required />
+          <input id="appointmentDate" name="appointmentDate" type="datetime-local" [(ngModel)]="appointmentDate"
+            required />
         </div>
         <div class="form-group">
           <label for="notes">Notes</label>
-          <textarea id="notes" name="notes" [(ngModel)]="notes" required placeholder="Describe your dental needs"></textarea>
+          <textarea id="notes" name="notes" [(ngModel)]="notes" required
+            placeholder="Describe your dental needs"></textarea>
         </div>
 
         <div class="message success" *ngIf="success()">{{ success() }}</div>

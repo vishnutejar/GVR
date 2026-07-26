@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.AspNetCore.Identity;
 
 namespace GVR.Api.Controllers;
 
@@ -12,7 +13,6 @@ namespace GVR.Api.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly GVRAppDbContext _dbContext;
-
     public AuthController(GVRAppDbContext dbContext)
     {
         _dbContext = dbContext;
@@ -53,25 +53,33 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<ActionResult<AuthResponse>> Login(LoginRequest request)
     {
+        var passwordHasher = new PasswordHasher<User>();
+
         if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password))
         {
             return BadRequest(new { message = "Email and password are required." });
         }
 
         var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
-        if (user == null || user.PasswordHash != HashPassword(request.Password))
+
+        // When creating a user:
+        user.PasswordHash = passwordHasher.HashPassword(user, request.Password);
+
+        // When verifying login:
+        var result = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);
+
+        if (result == PasswordVerificationResult.Failed)
         {
             return Unauthorized(new { message = "Invalid email or password." });
         }
-
         return Ok(new AuthResponse(user.UserId, user.FullName, user.Email, user.Phone, user.CreatedAt));
     }
 
     private static string HashPassword(string password)
     {
-        using var sha256 = SHA256.Create();
-        var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-        return Convert.ToHexString(hashedBytes);
+        var bytes = Encoding.UTF8.GetBytes(password);
+        var hash = SHA256.HashData(bytes);
+        return Convert.ToBase64String(hash);
     }
 }
 
