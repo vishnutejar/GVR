@@ -38,11 +38,8 @@ export class AppointmentsComponent {
       const user = this.currentUser();
       if (user) {
         this.loadAppointments(user.userId);
+       this.loadServiceTypes();
       }
-    });
-
-    effect(() => {
-      this.loadServiceTypes();
     });
   }
 
@@ -59,6 +56,7 @@ export class AppointmentsComponent {
         this.serviceTypesList.set(serviceTypes);
         // This will hold filtered results
         this.filteredItems = serviceTypes;
+        console.log('Service types:', serviceTypes);
         this.loading.set(false);
       },
       error: (err) => {
@@ -69,32 +67,18 @@ export class AppointmentsComponent {
   }
 
   
-  loadService(userId: number) {
-    this.loading.set(true);
-    this.error.set(null);
-    this.appointmentService.getAppointmentsByUser(userId).subscribe({
-      next: (appointments) => {
-        const now = new Date();
-        this.upcoming.set(appointments.filter(appointment => new Date(appointment.appointmentDate) >= now));
-        this.past.set(appointments.filter(appointment => new Date(appointment.appointmentDate) < now));
-        this.loading.set(false);
-      },
-      error: (err) => {
-        this.error.set('Unable to load appointments. Please try again.');
-        console.error(err);
-        this.loading.set(false);
-      }
-    });
-  }
 
   loadAppointments(userId: number) {
     this.loading.set(true);
-    this.error.set(null);
     this.appointmentService.getAppointmentsByUser(userId).subscribe({
       next: (appointments) => {
         const now = new Date();
-        this.upcoming.set(appointments.filter(appointment => new Date(appointment.appointmentDate) >= now));
-        this.past.set(appointments.filter(appointment => new Date(appointment.appointmentDate) < now));
+    this.upcoming.set(
+      appointments.filter((appointment) => new Date(appointment.appointmentDate) >= now),
+    );
+    this.past.set(
+      appointments.filter((appointment) => appointment.appointmentDate < now.toDateString()),
+    );
         this.loading.set(false);
       },
       error: (err) => {
@@ -106,12 +90,13 @@ export class AppointmentsComponent {
   }
 
   bookAppointment() {
-    this.error.set(null);
-    this.success.set(null);
-
     if (!this.serviceTypes.trim() || !this.appointmentDate.trim() || !this.notes.trim()) {
       this.error.set('Please fill in all required fields for your appointment.');
       return;
+    }
+    else if (this.getAppointmentStatus(this.appointmentDate.trim())==='Completed'){
+       this.error.set('Please Select Upcomming Date to required fields for your appointment.');
+       return;
     }
 
     const user = this.currentUser();
@@ -123,7 +108,7 @@ export class AppointmentsComponent {
     const payload: Appointment = {
       userId: user.userId,
       serviceType: this.serviceTypes.trim(),
-      appointmentDate: new Date(this.appointmentDate).toISOString(),
+      appointmentDate: this.appointmentDate,
       notes: this.notes.trim(),
       status: 'Upcoming'
     };
@@ -132,9 +117,9 @@ export class AppointmentsComponent {
     this.appointmentService.createAppointment(payload).subscribe({
       next: () => {
         this.success.set('Appointment booked successfully.');
-        this.serviceTypes = '';
-        this.appointmentDate = '';
-        this.notes = '';
+        this.serviceTypes = payload.serviceType;
+        this.appointmentDate = payload.appointmentDate;
+        this.notes = payload.notes??"";
         this.loadAppointments(user.userId);
         this.loading.set(false);
       },
@@ -145,18 +130,8 @@ export class AppointmentsComponent {
       }
     });
   }
-
-  // Called when user types in the input
-  filterItems() {
-    const query = this.selectedServiceTypes.toLowerCase();
-    this.filteredItems = this.serviceTypesList().filter(item =>
-      item.ServiceName.toLowerCase().includes(query)
-    );
-  }
-
-  // Called when user clicks on an item
-  selectItem(item: any) {
-    this.selectedServiceTypes = item.ServiceName;
-    this.filteredItems = []; // hide dropdown after selection
-  }
+  getAppointmentStatus(appointmentDateTime: string): string {
+     const appointment = new Date(appointmentDateTime).toISOString();
+      const now = new Date().toISOString();
+        return appointment <= now ? 'Completed' : 'Upcoming';}
 }

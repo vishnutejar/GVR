@@ -14,9 +14,9 @@ export interface Appointment {
 }
 
 export interface ServiceType {
-      ServiceTypeId?: number;
+      serviceTypeId?: number;
      ServiceCategory: string;
-     ServiceName: string;
+     name: string;
      Description: string;
      Price: number;
      CreatedAt: string;
@@ -63,12 +63,12 @@ export class AppointmentService {
   filterItems() {
     const query = this.serviceTypesSearchText.toLowerCase();
     this.filteredItems = this.serviceTypesList.filter(item =>
-      item.ServiceName.toLowerCase().includes(query)
+      item.name.toLowerCase().includes(query)
     );
   }
 
   selectItem(item: ServiceType) {
-    this.serviceTypesSearchText = item.ServiceName;
+    this.serviceTypesSearchText = item.name;
     this.filteredItems = [];
   }
 }

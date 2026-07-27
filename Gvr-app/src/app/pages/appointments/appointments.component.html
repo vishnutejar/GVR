@@ -25,10 +25,13 @@
       <form class="appointment-form" (ngSubmit)="bookAppointment()">
         <div class="form-group">
           <label for="serviceType">Service Type</label>
-          <select id="serviceType" class="form-control" [(ngModel)]="serviceTypes">
-            <option value="" disabled selected>Select a service</option>
-            <option *ngFor="let type of serviceTypesList()" [value]="type.ServiceName">
-              {{ type.ServiceName }}
+          <select id="serviceType" name="serviceType"
+            class="form-control"
+            required
+            [(ngModel)]="serviceTypes">
+            <option value="" disabled>Select a service</option>
+            <option *ngFor="let type of serviceTypesList()" [value]="type.serviceTypeId">
+              {{type.name}}
             </option>
           </select>
         </div>
