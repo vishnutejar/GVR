@@ -15,6 +15,7 @@ export class SignupComponent {
   fullName = '';
   email = '';
   password = '';
+  confirmpassword = '';
   phone = '';
   loading = signal(false);
   error = signal<string | null>(null);
@@ -25,8 +26,13 @@ export class SignupComponent {
   submitSignup() {
     this.error.set(null);
     this.success.set(null);
+    
+    if(this.password.trim() !== this.confirmpassword.trim()){
+      this.error.set('Please fill password and confirm password same');
+      return;
+    }
 
-    if (!this.fullName.trim() || !this.email.trim() || !this.password.trim() || !this.phone.trim()) {
+    if (!this.fullName.trim() || !this.email.trim() || !this.password.trim() || !this.phone.trim() || !this.confirmpassword.trim()) {
       this.error.set('Please fill in all required fields to create your account.');
       return;
     }
@@ -44,7 +50,7 @@ export class SignupComponent {
         this.authService.setUser(response);
         this.success.set(`Welcome, ${response.fullName}. Your account is ready.`);
         this.loading.set(false);
-        this.router.navigate(['/appointments']);
+        this.router.navigate(['/ap pointments']);
       },
       error: (err) => {
         this.error.set(err?.error?.message || 'Unable to register. Please try again.');
