@@ -3,6 +3,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface Appointment {
+  name?: string;
+  phoneNumber?: string;
   appointmentId?: number;
   userId: number;
   serviceType: string;

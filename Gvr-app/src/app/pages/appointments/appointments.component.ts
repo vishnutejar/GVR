@@ -20,6 +20,8 @@ export class AppointmentsComponent {
   appointmentDate = '';
   serviceTypes = '';
   notes = '';
+  name = '';
+  phoneNumber = '';
   loading = signal(false);
   error = signal<string | null>(null);
   success = signal<string | null>(null);
